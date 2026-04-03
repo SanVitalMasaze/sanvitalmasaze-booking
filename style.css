@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f7faff;
+    color: #333;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#calendar, #time-slots {
+    margin-top: 20px;
+}
+
+button {
+    background: #8ecae6; /* pastel modra */
+    border: none;
+    padding: 12px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+button:hover {
+    background: #219ebc;
+}
+
+.time-slot {
+    padding: 10px;
+    margin: 5px 0;
+    background: #e9f5db; /* pastel zelena */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.time-slot.booked {
+    background: #ffdd99; /* pastel rumena */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
