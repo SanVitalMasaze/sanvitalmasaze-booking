@@ -49,17 +49,17 @@ exports.handler = async (event, context) => {
 
     // 2) Vstavi novo rezervacijo
     const { data, error } = await supabase
-      .from('Rezervacije')
-      .insert([
-        {
-          datum: date,
-          ura: time,
-          ime: name,
-          email: email,
-          telefon: phone || null
-        }
-      ])
-      .select()
+  .from('Rezervacije')
+  .insert([
+    {
+      Datum: date,
+      Ura: time,
+      Ime: name,
+      "e-mail": email,
+      Telefon: phone || null
+    }
+  ])
+  .select()
 
     if (error) {
       console.error('Error inserting reservation:', error)
