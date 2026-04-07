@@ -29,8 +29,8 @@ exports.handler = async (event, context) => {
     const { data: existing, error: checkError } = await supabase
       .from('Rezervacije')
       .select('*')
-      .eq('datum', date)
-      .eq('ura', time)
+      .eq('Datum', date)
+      .eq('Ura', time)
 
     if (checkError) {
       console.error('Error checking existing reservation:', checkError)
