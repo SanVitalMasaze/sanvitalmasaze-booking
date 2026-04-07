@@ -1,9 +1,8 @@
-// force redeploy
-// force redeploy 2
+// create-appointment.js – CommonJS verzija
 
-import { createClient } from '@supabase/supabase-js'
+const { createClient } = require('@supabase/supabase-js')
 
-export const handler = async (event, context) => {
+exports.handler = async (event, context) => {
   try {
     if (event.httpMethod !== 'POST') {
       return {
@@ -22,58 +21,66 @@ export const handler = async (event, context) => {
     }
 
     const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-)
-
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_ANON_KEY
     )
 
     // 1) Preveri, ali je termin že zaseden
     const { data: existing, error: checkError } = await supabase
       .from('Rezervacije')
       .select('*')
-      .eq('Datum', date)
-      .eq('Ura', time)
+      .eq('datum', date)
+      .eq('ura', time)
 
     if (checkError) {
+      console.error('Error checking existing reservation:', checkError)
       return {
         statusCode: 500,
         body: JSON.stringify({ error: 'Database check failed' })
       }
     }
 
-    if (existing.length > 0) {
+    if (existing && existing.length > 0) {
       return {
         statusCode: 409,
         body: JSON.stringify({ error: 'Termin je že zaseden.' })
       }
     }
 
-    // 2) Shrani rezervacijo
+    // 2) Vstavi novo rezervacijo
     const { data, error } = await supabase
       .from('Rezervacije')
       .insert([
-        { Datum: date, Ura: time, Ime: name, 'e-mail': email, Telefon: phone }
+        {
+          datum: date,
+          ura: time,
+          ime: name,
+          email: email,
+          telefon: phone || null
+        }
       ])
+      .select()
 
     if (error) {
+      console.error('Error inserting reservation:', error)
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: 'Failed to save appointment' })
+        body: JSON.stringify({ error: 'Failed to create reservation' })
       }
     }
 
-    // 3) (opcijsko) tukaj bova dodala email + Google Calendar
-
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, message: 'Termin rezerviran.' })
+      body: JSON.stringify({
+        message: 'Rezervacija uspešno ustvarjena.',
+        reservation: data[0]
+      })
     }
-
   } catch (err) {
+    console.error('Unhandled error:', err)
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Server error', details: err.message })
+      body: JSON.stringify({ error: 'Internal server error' })
     }
   }
 }
