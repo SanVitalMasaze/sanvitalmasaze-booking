@@ -1,4 +1,6 @@
 // force redeploy
+// force redeploy 2
+
 import { createClient } from '@supabase/supabase-js'
 
 export const handler = async (event, context) => {
