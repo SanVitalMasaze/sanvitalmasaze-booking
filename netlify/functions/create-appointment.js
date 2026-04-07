@@ -1,4 +1,4 @@
-// create-appointment.js – CommonJS verzija
+// create-appointment.js – verzija 100% usklajena s tvojo Supabase tabelo
 
 const { createClient } = require('@supabase/supabase-js')
 
@@ -49,17 +49,17 @@ exports.handler = async (event, context) => {
 
     // 2) Vstavi novo rezervacijo
     const { data, error } = await supabase
-  .from('Rezervacije')
-  .insert([
-    {
-      Datum: date,
-      Ura: time,
-      Ime: name,
-      "e-mail": email,
-      Telefon: phone || null
-    }
-  ])
-  .select()
+      .from('Rezervacije')
+      .insert([
+        {
+          Datum: date,
+          Ura: time,
+          Ime: name,
+          "e-mail": email,
+          Telefon: phone || null
+        }
+      ])
+      .select()
 
     if (error) {
       console.error('Error inserting reservation:', error)
@@ -76,6 +76,7 @@ exports.handler = async (event, context) => {
         reservation: data[0]
       })
     }
+
   } catch (err) {
     console.error('Unhandled error:', err)
     return {
